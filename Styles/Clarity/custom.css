@@ -1,0 +1,27 @@
+/*
+  This is the last stylesheet added to the HTML document,
+  any styles defined here will superceede any previous styles.
+  You can use this to make changes to differentiate reports based on the same Style.
+*/
+
+@charset "utf-8";
+:root {
+    /* Search bar styling*/
+    --search-disabled-link: var(--clr-color-neutral-400);
+    --search-text-color: var(--clr-color-neutral-300);
+    --search-bg-color: transparent;
+    --search-border-color: var(--clr-color-neutral-300);
+    --search-border-radius: 0px;
+}
+
+::placeholder {
+    color: var(--clr-color-neutral-700);
+}
+
+.searchbar {
+    border-radius: 10px;
+}
+
+.table tr td table {
+    width: 100%
+}

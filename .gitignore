@@ -1,0 +1,9 @@
+
+# Ignore the contents of the reports directory
+Reports/*
+
+# Always include .gitkeep
+!.gitkeep
+
+# Explude individual files
+/GlobalVariables.ps1

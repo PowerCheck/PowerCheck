@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+
+<head>
+    <title></title>
+    <link rel="icon" type="image/png" href="../../resources/favicon.png" />
+
+    <link type="text/css" rel="stylesheet" href="clr-ui.min.css" />
+
+    <!-- Embeded CSS -->
+    <style type='text/css'>
+        .banner {
+            background-image: url("Banner.png");
+            background-repeat: no-repeat;
+            background-size: auto;
+            background-position: calc(100% - 15px) 50%;
+            height: 95px;
+            background-color: #1d354c;
+        }
+        
+        .banner div {
+            text-align: left;
+            position: relative;
+            top: 50%;
+            transform: translate(15px, -50%);
+            width: fit-content;
+            color: white;
+        }
+        
+        .banner span {
+            font-size: 2.5em;
+            font-variant: small-caps;
+        }
+        
+        .content-area h3 {
+            padding-top: 5px;
+            font-variant: small-caps;
+            border-top: 1px solid #ccc;
+            font-size: 1.5em;
+        }
+        
+        .table th,
+        .table td {
+            text-align: left;
+        }
+        
+        .list td:first-child {
+            min-width: fit-content;
+            background-color: #fafafa;
+            white-space: nowrap;
+        }
+        
+        .list td:last-child {
+            width: 100%;
+        }
+        
+        .nav-list-header {
+            border-top: 1px solid #ccc;
+            margin: 5px 0 0 -10px;
+            width: calc(100% - 10px);
+        }
+        
+        footer {
+            padding-left: 10px;
+        }
+        
+        .critical {
+            background-color: #ffdddd;
+        }
+        
+        .warning {
+            background-color: #fff6ba;
+        }
+    </style>
+
+    <!-- Searchbar CSS and JavaScript -->
+    <searchbar />
+
+    <!-- Custom CSS -->
+    <link type="text/css" rel="stylesheet" href="custom.css" />
+
+</head>
+
+<body>
+    <div class="main-container">
+        <header class="header header-6">
+            <div class="branding"><span class="title" powercheck="val:report-header">PowerCheck</span></div>
+            <input id="searchbar" />
+        </header>
+        <div class="content-container">
+            <div class="content-area">
+
+                <div class="banner">
+                    <div>
+                        <span powercheck="val:report-title">ReportTitle</span>
+                    </div>
+                </div>
+
+                <div powercheck="element:scripts-list">
+                    <div style='height: 10px;'></div>
+                    <a powercheck="attr:name:script-id"></a>
+                    <h3 powercheck="val:group-name"></h3>
+                    <table class="table" powercheck="attr:script-display:script-id">
+                        <tr>
+                            <td class="left"><b powercheck="val:script-header"></b></td>
+                        </tr>
+                        <tr>
+                            <td class="left" style='background-color: #f4f7fc; color: #000000; font-style: italic' powercheck="val:script-comments"></td>
+                        </tr>
+                        <tr>
+                            <td class="left" powercheck="val:script-data">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <th></th>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div powercheck="element:sample">
+                    <div style='height: 10px;'></div>
+                    <a powercheck="attr:name:script-id"></a>
+                    <h3 powercheck="val:group-name">Plugin group title</h3>
+                    <table class="table" powercheck="attr:script-display:script-id">
+                        <tr>
+                            <td class="left"><b powercheck="val:script-header">Table</b></td>
+                        </tr>
+                        <tr>
+                            <td class="left" style='background-color: #f4f7fc; color: #000000; font-style: italic' powercheck="val:script-comments">Comments, plugin script displayed as table (default)</td>
+                        </tr>
+                        <tr>
+                            <td class="left" powercheck="val:script-data attr:script-groupid:script-id">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <th>Column 1</th>
+                                            <th>Column 2</th>
+                                            <th>Column 3</th>
+                                        </tr>
+                                        <tr>
+                                            <td>Row A col 1</td>
+                                            <td>Row A col 2</td>
+                                            <td>Row A col 3</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Row B col 1</td>
+                                            <td>Row B col 2</td>
+                                            <td>Row B col 3</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div style='height: 10px;'></div>
+                    <a></a>
+                    <h3></h3>
+                    <table class="table">
+                        <tr>
+                            <td class="left"><b>List</b></td>
+                        </tr>
+                        <tr>
+                            <td class="left" style='background-color: #f4f7fc; color: #000000; font-style: italic'>Comments, plugin script displayed as list</td>
+                        </tr>
+                        <tr>
+                            <td class="left">
+                                <table class="list">
+                                    <tbody>
+                                        <tr>
+                                            <td>Row A col 1</td>
+                                            <td>Row A col 2</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Row B col 1</td>
+                                            <td>Row B col 2</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+
+            <nav class="sidenav" powercheck="element:menu">
+                <section class="sidenav-content">
+                    <section class="nav-group">
+                        <ul class="nav-list" powercheck="val:navlist">
+                            <li class="nav-list-header">Blank</li>
+                            <li><a class="nav-link">blank</a></li>
+                            <li class="nav-list-header">Sample view</li>
+                            <li><a class="nav-link">Table</a></li>
+                            <li><a class="nav-link">List</a></li>
+                        </ul>
+                    </section>
+                </section>
+            </nav>
+
+        </div>
+        <!-- CustomHTMLClose -->
+        <footer>
+            <p>PowerCheck by Luis Tavares</p>
+        </footer>
+    </div>
+</body>
+
+</html>

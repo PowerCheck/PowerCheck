@@ -1,0 +1,9 @@
+.critical {
+    background-color: #ffdddd;
+    color: red;
+}
+
+.warning {
+    background-color: #fff6ba;
+    color: black;
+}

@@ -1,0 +1,15 @@
+
+# Start of Settings
+
+# End of Settings
+
+$Title = "20 Do not run"
+$Header = "Do not run"
+$Comments = "A disabled plugin"
+$Display = "Table"
+$Author = "Luis Tavares"
+$PluginVersion = 1.0
+$PluginCategory = "Category"
+
+# Suppress UseDeclaredVarsMoreThanAssignments warnning in VS Code
+$null = $Title, $Header, $Comments, $Display, $Author, $PluginVersion, $PluginCategory, $TableFormat

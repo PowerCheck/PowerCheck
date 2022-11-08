@@ -1,0 +1,143 @@
+<style type='text/css'>
+     :root {
+        --search-icon: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAABmJLR0QAgACAAIBEKJNNAAAACXBIWXMAABJ0AAASdAHeZh94AAAAB3RJTUUH5gQKACw6acmmhwAAAkhJREFUOMullD1rVFEQht/zNbsmoIV2ioXgWggSVMQViRbTpPQH2GhnZZ9KAhYBGyH/xC7jBwimEBEb0XQxphSJyLL3fFp4Vtbl3mRJpps5w3PfO3PeozATIrIIYBXACoBBLX8D8ArAOjPv4JBQM8CNpmkeERGUUhlArEe2lKJDCCCil8zMc0FF5GNKackY4wGglEI5579NSkFr/a+ulPrFzKe6oHqisAJHACjnTEqpNWPMLWPMNa314yngqJRyUkS2OpWKyGLTNL97vZ4HQAB2mfl8W7OIvCml3FFKjUIIC865ZWZ+26Z0lYgAADlndAEBgJnvKqV+Aug75wDgadfvryilcimFtNZrODwe5Jw1AB9jvN0FHQCIdSkv5oBu1t5YSoGI9NugdiqPc0CbmbzXBt2ZXBsAwzmgw9pr65z326CvAZDWOgNYnwP63BiTAVjn3JeumT7z3gPAuJSyICKdcxWR9ZTSEoBxXdaTTkeJyFYp5aZSapRzXtBa7wJ4yMyb9fwGgI2U0vVqEJtSImPMCWYeH2TTZuIYAP2Ukp7YVGsNYwwAjOosIwAbYyRr7Rlm/nHQg7IdQrjonMstN8HmnHUpBfV9iAD6MUZtrT3HzHv/eX/KMQPn3D0A2yEEijFSjJG89wRgT2t93xizXHMLYGyt9SGE7yJyoVVpy2LO1o/tzdSH3vt3RDRRbEMI5Jy7zMyfFY4YInLVe/9hGuy9JyK6dGRoBV/x3n+aAvcB7B8LWsGDEMLXulwAGB8bOjX79wBOAxj+AWaVIzcAB496AAAAAElFTkSuQmCC);
+        --search-bg-color: none;
+        --search-match-color: black;
+        --search-match-bg: yellow;
+    }
+    
+    .searchbar {
+        display: flex;
+        flex: 1 1 auto;
+        overflow-y: auto;
+        margin: 5px;
+        padding: 12px 20px 12px 40px;
+        font-size: 1.0rem;
+        color: var(--search-text-color);
+        background-color: var(--search-bg-color);
+        background-image: var(--search-icon);
+        background-position: 10px 12px;
+        background-repeat: no-repeat;
+        border: 1px solid var(--search-border-color);
+        border-radius: var(--search-border-radius);
+    }
+    
+    .searchbar:focus {
+        outline: none;
+    }
+    
+    .linkdisabled {
+        pointer-events: none;
+        color: var(--search-disabled-link);
+    }
+    
+    .highlight {
+        color: var(--search-match-color);
+        background-color: var(--search-match-bg);
+        font-weight: bold;
+    }
+</style>
+<script type="text/javascript">
+    window.addEventListener('load', (event) => {
+        document.addEventListener("keydown", KeyPressed);
+
+        // Dynamically add the seachbar, as we don't want it to be present
+        // when sending the report by email.
+        //'<input class="searchbar" id="searchbar" placeholder="Search..." />'
+        const searchBarInput = document.createElement("input");
+        searchBarInput.id = "searchbar";
+        searchBarInput.className = "searchbar";
+        searchBarInput.placeholder = "Search...";
+        document.getElementById("searchbar").replaceWith(searchBarInput);
+
+        const nodeSearchBar = document.getElementById("searchbar");
+        nodeSearchBar.oninput = function(e) {
+            FilterReport(e.target.value.toLowerCase());
+        }
+        nodeSearchBar.focus();
+    });
+
+    function FilterReport(filter = "") {
+        document.querySelectorAll("[script-groupid]").forEach((tbody) => {
+            i = 1;
+            tbody.querySelectorAll("tr").forEach((row) => {
+
+                // Remove highlight, if present on the row
+                let highlightedRow = row.querySelector('span[class="highlight"]');
+                if (highlightedRow != null) {
+                    row.innerHTML = row.innerHTML.replaceAll(`<span class="highlight">${highlightedRow.innerHTML}</span>`, highlightedRow.innerHTML);
+                }
+
+                if (!row.innerHTML.toLowerCase().includes(filter)) {
+                    row.style.display = "none";
+                    i = i + 1;
+                } else {
+                    row.style.display = "";
+
+                    // Highlight the matching text on the row, but only if it is text
+                    if (filter.length > 2) {
+                        // let current = row.querySelector('span[class="highlight"]');
+                        if (row.querySelector('span[class="highlight"]') == null) {
+                            row.querySelectorAll("td").forEach((td) => {
+                                td.innerHTML = Highlight(td.innerHTML, filter);
+                            });
+                        }
+                    }
+
+                }
+
+                // Hide modules that don't have a matching record
+                const pluginId = tbody.getAttribute("script-groupid");
+                const moduleTable = document.querySelector(`[script-display="script-${pluginId}"]`);
+                let filteredDisplayStyle = "";
+                if (i == tbody.querySelectorAll("tr").length + 1) {
+                    filteredDisplayStyle = "none";
+                }
+                moduleTable.style.display = filteredDisplayStyle;
+                headerSkipped = true;
+            });
+        });
+
+        // Disables nav-links if the corresponding table doesn't have a match for the search term.
+        document.querySelectorAll("[script-display]").forEach((table) => {
+            const pluginId = table.getAttribute("script-display");
+            const pluginName = document.querySelector(`a[name="${pluginId}"]`).name;
+            if (typeof pluginName !== "undefined") {
+                let navlink = document.querySelector(`a[href="#${pluginName}"]`);
+                if (table.style.display == "none") {
+                    navlink.parentElement.className = "linkdisabled";
+                    table.style.display = "none";
+                } else {
+                    navlink.parentElement.className = "";
+                    table.style.display = "";
+                }
+            }
+        });
+    }
+
+    function KeyPressed(event) {
+        if (event.code == "Escape") {
+            const nodeSearchBar = document.getElementById("searchbar");
+            nodeSearchBar.value = "";
+            nodeSearchBar.focus();
+            FilterReport();
+        } else if (document.activeElement.id != "searchbar") {
+            document.getElementById("searchbar").focus();
+        }
+    }
+
+    function Highlight(text, search) {
+        if (typeof text === "undefined") {
+            return text;
+        }
+        const regExSearch = new RegExp(`(?<!<span class="highlight">)${search.replace(/[*+?^${}()|[\]\\]/smi, '\\$&')}`, "ig");
+        const matched = text.match(regExSearch);
+        if (matched != null) {
+            matched.forEach((match) => {
+                let regExMatch = new RegExp(`(?<!<span class="highlight">)${match.replace(/[*+?^${}()|[\]\\]/smi, '\\$&')}`, "ig");
+                text = text.replace(regExMatch, `<span class="highlight">${match}</span>`);
+            });
+        }
+        return text;
+    }
+</script>

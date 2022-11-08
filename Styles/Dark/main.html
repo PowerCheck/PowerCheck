@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+
+<head>
+    <title></title>
+    <link rel="icon" type="image/png" href="../../resources/favicon.png" />
+
+    <link type="text/css" rel="stylesheet" href="main.css" />
+
+
+    <style type='text/css'>
+        .banner {
+            background-image: url("banner.gif");
+        }
+    </style>
+
+    <searchbar />
+
+    <link type="text/css" rel="stylesheet" href="custom.css" />
+</head>
+
+<body>
+    <div class="main-container">
+        <header class="header">
+            <div class="branding"><span class="title" powercheck="val:report-header">PowerCheck</span></div>
+            <input id="searchbar" />
+        </header>
+        <div class="content-container">
+            <div class="content-area">
+
+                <div class="banner">
+                    <div>
+                        <span powercheck="val:report-title">ReportTitle</span>
+                    </div>
+                </div>
+
+                <div powercheck="element:scripts-list">
+                    <div style='height: 10px;'></div>
+                    <a powercheck="attr:name:script-id"></a>
+                    <h3 powercheck="val:group-name"></h3>
+                    <table class="table" powercheck="attr:script-display:script-id">
+                        <tr>
+                            <td class="left"><b powercheck="val:script-header"></b></td>
+                        </tr>
+                        <tr>
+                            <td class="left comments" powercheck="val:script-comments"></td>
+                        </tr>
+                        <tr>
+                            <td class="left" powercheck="val:script-data">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <th></th>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div powercheck="element:sample">
+                    <div style='height: 10px;'></div>
+                    <a powercheck="attr:name:script-id"></a>
+                    <h3 powercheck="val:group-name">Plugin group title</h3>
+                    <table class="table" powercheck="attr:script-display:script-id">
+                        <tr>
+                            <td class="left"><b powercheck="val:plugin-header">Table</b></td>
+                        </tr>
+                        <tr>
+                            <td class="left comments" powercheck="val:script-comments">Comments, plugin script displayed as table (default)</td>
+                        </tr>
+                        <tr>
+                            <td class="left" powercheck="val:script-data">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <th>Column 1</th>
+                                            <th>Column 2</th>
+                                            <th>Column 3</th>
+                                        </tr>
+                                        <tr>
+                                            <td>Row A col 1</td>
+                                            <td>Row A col 2</td>
+                                            <td>Row A col 3</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Row B col 1</td>
+                                            <td>Row B col 2</td>
+                                            <td>Row B col 3</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div style='height: 10px;'></div>
+                    <a></a>
+                    <h3></h3>
+                    <table class="table">
+                        <tr>
+                            <td class="left"><b>List</b></td>
+                        </tr>
+                        <tr>
+                            <td class="left comments" powercheck="val:script-comments">Comments, plugin script displayed as list</td>
+                        </tr>
+                        <tr>
+                            <td class="left">
+                                <table class="list">
+                                    <tbody>
+                                        <tr>
+                                            <td>Row A col 1</td>
+                                            <td>Row A col 2</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Row B col 1</td>
+                                            <td>Row B col 2</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <nav class="side-menu" powercheck="element:menu">
+                <section class="nav-group">
+                    <ul class="nav-list" powercheck="val:navlist">
+                        <li class="nav-list-header">Blank</li>
+                        <li><a class="nav-link">blank</a></li>
+                        <li class="nav-list-header">Sample view</li>
+                        <li><a class="nav-link">Table</a></li>
+                        <li><a class="nav-link">List</a></li>
+                    </ul>
+                </section>
+            </nav>
+
+        </div>
+        <!-- CustomHTMLClose -->
+        <footer>
+            <p>PowerCheck by Luis Tavares</p>
+        </footer>
+    </div>
+</body>
+
+</html>

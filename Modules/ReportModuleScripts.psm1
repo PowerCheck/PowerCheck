@@ -272,8 +272,8 @@ function Export-JsonData {
     Title = $GlobalVars.ReportTitle
     Plugin = $PluginName
     Runtime = @{
-      Start = $ReportData.StartDate
-      Finish = $ReportData.FinishDate
+      Start = ("{0} {1}" -f $ReportData.StartDate.ToShortDateString(), $ReportData.StartDate.ToLongTimeString() )
+      Finish = ("{0} {1}" -f $ReportData.FinishDate.ToShortDateString(), $ReportData.FinishDate.ToLongTimeString() )
     }
     Version = $GlobalVars.Version
     Data = $ReportData.Result

@@ -13,7 +13,7 @@ $script:GlobalVars = @{
 }
 
 #Region Enumerator flags
-[Flags()] enum SetupWizardFlags {
+$SetupWizardFlags = [PsCustomObject]@{
   None = 0
   Global = 1
   Plugin = 2
@@ -52,12 +52,12 @@ Test-Configuration -FileName $script:PowerCheckPath\GlobalVariables.ps1
 
 $runSetupWizardGlobal = $false
 $runSetupWizardPlugin = $false
-$setupWizardFlag = [SetupWizardFlags].GetEnumValues().Where({$_ -eq $SetupWizard}).value__
+$setupWizardFlag = $setupWizardFlags.($SetupWizard)
 
 # Global configuration SetupWizard
 if (Test-Path -Path $script:PowerCheckPath\GlobalVariables.ps1) {
   $config = Get-Content -Path $script:PowerCheckPath\GlobalVariables.ps1 -Raw
-  if ( ($config | Select-String '(?smi)\$SetupWizard\s+?=\s+?\$true') -or ($setupWizardFlag -band [SetupWizardFlags]::Global)) {
+  if ( ($config | Select-String '(?smi)\$SetupWizard\s+?=\s+?\$true') -or ($setupWizardFlag -band $SetupWizardFlags.Global)) {
     $runSetupWizardGlobal = $true
     Set-Configuration -FileName $script:PowerCheckPath\GlobalVariables.ps1 -ConfigMode global
   }
@@ -66,7 +66,7 @@ if (Test-Path -Path $script:PowerCheckPath\GlobalVariables.ps1) {
 # User plugin configuration SetupWizard
 if (Test-Path -Path $script:PluginRootPath\GlobalVariables.ps1) {
   $config = Get-Content -Path $script:PluginRootPath\GlobalVariables.ps1 -Raw
-  if ( ($config | Select-String '(?smi)\$SetupWizard\s+?=\s+?\$true') -or ($setupWizardFlag -band [SetupWizardFlags]::Plugin) ) {
+  if ( ($config | Select-String '(?smi)\$SetupWizard\s+?=\s+?\$true') -or ($setupWizardFlag -band $SetupWizardFlags.Plugin) ) {
     $runSetupWizardPlugin = $true
     Set-Configuration -FileName $script:PluginRootPath\GlobalVariables.ps1 -ConfigMode plugin
   }
@@ -107,7 +107,7 @@ if ( Test-Path -Path $script:PowerCheckPath\EndScript.ps1 ) {
 . $script:PowerCheckPath\EndScript.ps1
 }
 if ( Test-Path $script:PluginRootPath\EndScript.ps1) {
-Write-LogMessage -Message $script:PowerCheckLocalization.pcEndScriptPlugin
+  Write-LogMessage -Message $script:PowerCheckLocalization.pcEndScriptPlugin
 . $script:PluginRootPath\EndScript.ps1
 }
 #EndRegion
@@ -116,7 +116,6 @@ Write-LogMessage -Message $script:PowerCheckLocalization.pcEndScriptPlugin
 $script:ResourceFiles = Get-ResourceFiles -Style $GlobalVars.Style -Culture $GlobalVars.Culture -PowerCheckPath $script:PowerCheckPath -PluginPath $script:PluginRootPath
 
 $date = $pluginData.StartDate | Get-Date -Format "yyyyMMdd-hhmm"
-$date = "00000000-0000"
 $tempPath = (Resolve-Path -Path $env:TEMP).Path
 
 if ($Outputpath -eq "") {

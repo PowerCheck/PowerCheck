@@ -5,6 +5,10 @@
 
 Get-ChildItem | Select-Object Name,LastAccessTime,LastWriteTime
 
+$CastAs = @{
+  "UnixTimeStamp" = @("LastAccessTime", "LastWriteTime")
+}
+
 $Title = "File list"
 $Header = "PowerCheck files"
 $Comments = "List with files on current directory"
@@ -14,4 +18,4 @@ $PluginVersion = 1.0
 $PluginCategory = "Category"
 
 # Suppress UseDeclaredVarsMoreThanAssignments warnning in VS Code
-$null = $Title, $Header, $Comments, $Display, $Author, $PluginVersion, $PluginCategory, $TableFormat
+$null = $Title, $Header, $Comments, $Display, $Author, $PluginVersion, $PluginCategory, $TableFormat, $CastAs

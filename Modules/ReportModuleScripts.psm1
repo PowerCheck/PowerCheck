@@ -109,6 +109,7 @@ function Invoke-ReportPluginScripts {
       TimeToRun = $timeToRun
 
       TableFormat = $TableFormat
+      CastAs = $CastAs
 
       # Json Extra data
       Order = $i
@@ -116,6 +117,7 @@ function Invoke-ReportPluginScripts {
     }
 
     $TableFormat = $false
+    $CastAs = $false
     $i++
   }
   Write-Progress -ID 1 -Activity "Evaluating plugins" -Status "Complete" -Completed
@@ -268,17 +270,21 @@ function Export-JsonData {
     New-Item -Path $JsonFilePath -ItemType Directory -Force
   }
 
-  @{
+  $jsonObject = @{
     Title = $GlobalVars.ReportTitle
     Plugin = $PluginName
     Runtime = @{
-      Start = ("{0} {1}" -f $ReportData.StartDate.ToShortDateString(), $ReportData.StartDate.ToLongTimeString() )
-      Finish = ("{0} {1}" -f $ReportData.FinishDate.ToShortDateString(), $ReportData.FinishDate.ToLongTimeString() )
+      Start = [Math]::Round((($ReportData.StartDate) - (Get-Date 1970-01-01)).TotalMilliseconds)
+      Finish = [Math]::Round((($ReportData.FinishDate) - (Get-Date 1970-01-01)).TotalMilliseconds)
     }
     Version = $GlobalVars.Version
     Data = $ReportData.Result
     ScriptList = $ReportData.ScriptFiles.FullName.Replace("$PluginRootPath\plugins\","")
-  } | ConvertTo-Json -Depth 5 | Out-File -FilePath "$JsonFilePath\$JsonFileName" -Force
+  } | ConvertTo-Json -Depth 5 | ConvertFrom-Json
+ 
+  $jsonObject = Invoke-CastMember -ReportData $ReportData -JsonData $jsonObject -GlobalCasterEnabled $false
+
+  $jsonObject | ConvertTo-Json -Depth 5 | Out-File -FilePath "$JsonFilePath\$JsonFileName" -Force
 }
 
 function Write-LogMessage {

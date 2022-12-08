@@ -128,6 +128,11 @@ function Compare-ObjecstByProperty {
   return $result
 }
 
+function Get-UnixTimestamp($d) {
+  return [System.Math]::Round(($d - (Get-Date "1970-01-01")).TotalMilliseconds)
+}
+
 Export-ModuleMember -Function Get-ReportPluginRoot
 Export-ModuleMember -Function ConvertTo-Base64Image
 Export-ModuleMember -Function Get-ResourceFiles
+Export-ModuleMember -Function Get-UnixTimestamp

@@ -47,7 +47,12 @@ function Get-ReportPluginScripts {
     [Parameter()] [String]$PluginRoot
   )
 
-  $scripts = Get-ChildItem -Path $PluginRoot\Scripts\ -Include *.ps1, *.ps1.disabled  -Recurse | Sort-Object Directory,FullName
+  if (Test-Path $PluginRoot\Scripts) {
+    $scripts = Get-ChildItem -Path $PluginRoot\Scripts\ -Include *.ps1, *.ps1.disabled  -Recurse | Sort-Object Directory,FullName
+  } elseif (Test-Path $PluginRoot\Plugins) {
+    # For compatibilty with vCheck
+    $scripts = Get-ChildItem -Path $PluginRoot\Plugins\ -Include *.ps1, *.ps1.disabled  -Recurse | Sort-Object Directory,FullName
+  }
   return $scripts
 }
 
@@ -281,7 +286,7 @@ function Export-JsonData {
     Data = $ReportData.Result
     ScriptList = $ReportData.ScriptFiles.FullName.Replace("$PluginRootPath\plugins\","")
   } | ConvertTo-Json -Depth 5 | ConvertFrom-Json
- 
+
   $jsonObject = Invoke-CastMember -ReportData $ReportData -JsonData $jsonObject -GlobalCasterEnabled $false
 
   $jsonObject | ConvertTo-Json -Depth 5 | Out-File -FilePath "$JsonFilePath\$JsonFileName" -Force

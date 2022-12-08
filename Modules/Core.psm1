@@ -16,6 +16,15 @@ function Get-ReportPluginRoot {
     $basePath = "$ScriptPath\Plugins"
   } elseif (Test-Path $ScriptPath\..\Plugins\$Plugin\Scripts) {
     $basePAth = "$ScriptPath\..\Plugins"
+
+  # For compatibilty with vCheck
+  } elseif (Test-Path $Plugin\Plugins) {
+      $basePath = "."
+    } elseif (Test-Path $ScriptPath\Plugins\$Plugin\Plugins) {
+      $basePath = "$ScriptPath\Plugins"
+    } elseif (Test-Path $ScriptPath\..\Plugins\$Plugin\Plugins) {
+      $basePAth = "$ScriptPath\..\Plugins"
+
   } else {
     return $false
   }

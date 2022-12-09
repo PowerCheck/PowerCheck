@@ -19,6 +19,14 @@ function Invoke-CastMember {
           }
 
         }
+
+        if ($dateTimeMembers) {
+          if ($JsonData.Data[$i].CastAs) {
+            # TODO: PowerCheck doesn't support type casts by user
+          } else {
+            $JsonData.Data[$i].CastAs = @{ "UnixTimestamp" = $dateTimeMembers}
+          }
+        }
       }
     }
   }

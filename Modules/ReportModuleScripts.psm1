@@ -287,7 +287,7 @@ function Export-JsonData {
     ScriptList = $ReportData.ScriptFiles.FullName.Replace("$PluginRootPath\plugins\","")
   } | ConvertTo-Json -Depth 5 | ConvertFrom-Json
 
-  $jsonObject = Invoke-CastMember -ReportData $ReportData -JsonData $jsonObject -GlobalCasterEnabled $false
+  $jsonObject = Invoke-CastMember -ReportData $ReportData -JsonData $jsonObject -GlobalCasterEnabled $true
 
   $jsonObject | ConvertTo-Json -Depth 5 | Out-File -FilePath "$JsonFilePath\$JsonFileName" -Force
 }

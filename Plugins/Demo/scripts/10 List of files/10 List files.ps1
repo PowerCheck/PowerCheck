@@ -6,7 +6,7 @@
 Get-ChildItem | Select-Object Name,LastAccessTime,LastWriteTime
 
 $CastAs = @{
-  "UnixTimeStamp" = @("LastAccessTime", "LastWriteTime")
+  "UnixTimestamp" = @("LastAccessTime", "LastWriteTime")
 }
 
 $Title = "File list"

@@ -10,23 +10,55 @@ function Invoke-CastMember {
     for ($i = 0; $i -lt $ReportData.Result.Count; $i++) {
       if ($ReportData.Result[$i].Details) {
 
-        $dateTimeMembers = ($ReportData.Result[$i].Details | Get-Member -MemberType NoteProperty,Property).Where({$_.Definition -match "datetime"}).Name | Sort-Object -Unique
+        $members = ($ReportData.Result[$i].Details | Get-Member -MemberType Property,NoteProperty,ScriptProperty)
+
+        # Loop through all elements in the object
         for ($ii = 0; $ii -lt $ReportData.Result[$i].Details.Count; $ii++) {
 
-          # Cast from PowerShell DateTime to UnixTimestamp
-          foreach ($member in $dateTimeMembers) {
-            $JsonData.Data[$i].Details[$ii].($member) = Get-UnixTimestamp $ReportData.Result[$i].Details[$ii].($member)
+          foreach ($member in $members) {
+            # Cast element values depending on member type
+            switch ($member.Definition.Split(" ")[0]) {
+              "datetime" {
+                $JsonData.Data[$i].Details[$ii].($member.Name) = Get-UnixTimestamp $ReportData.Result[$i].Details[$ii].($member.Name)
+              }
+              "timespan" {
+                $JsonData.Data[$i].Details[$ii].($member.Name) = $ReportData.Result[$i].Details[$ii].($member.Name).ToString()
+              }              
+              "System.Net.IPAddress" {
+                $JsonData.Data[$i].Details[$ii].($member.Name) = $ReportData.Result[$i].Details[$ii].($member.Name).IpAddressToString
+              }
+              Default {}
+            }
           }
 
         }
 
-        if ($dateTimeMembers) {
-          if ($JsonData.Data[$i].CastAs) {
-            # TODO: PowerCheck doesn't support type casts by user
-          } else {
-            $JsonData.Data[$i].CastAs = @{ "UnixTimestamp" = $dateTimeMembers}
+        # Do not auto Cast PowerCheck core scripts
+        if ($JsonData.Data[$i].Category -eq "PowerCheckCore") {
+          return $JsonData
+        }
+
+        # If CastAs is false(not set), then change it to a PSCustomObject
+        # so we can add elemets to it.
+        $castAs = $JsonData.Data[$i].CastAs
+        if ($false -eq $JsonData.Data[$i].CastAs) {
+          $castAs = [PSCustomObject]@{}
+        }
+
+        # Map datetime properties to UnixTimestamp
+        if ( ($unixTimestamp = $members.Where({$_.Definition -match "datetime"}) | Sort-Object Name -Unique ) ){
+          if ($null -eq $JsonData.Data[$i].CastAs.UnixTimestamp) {
+            $castAs | Add-Member -MemberType NoteProperty -Name UnixTimestamp -Value @($unixTimestamp.Name)
           }
         }
+
+        # Set CastAs as back as $false if the object is empty
+        if ( ($castAs | Get-Member -MemberType NoteProperty | Measure-Object).Count -eq 0 ) {
+          $castAs = $false
+        }
+
+        $JsonData.Data[$i].CastAs = $castAs
+
       }
     }
   }
